@@ -10,6 +10,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set Java 21
+        id: java21
         uses: actions/setup-java@v4
         with:
          distribution: 'temurin'
@@ -23,20 +24,27 @@ jobs:
 
     # Setup sonar-scanner
       - name: Setup SonarQube
-        uses: warchant/setup-sonar-scanner@v7
+        uses: warchant/setup-sonar-scanner@v10
+        with:
+          version: 8.1.0.6389
    
     # Run sonar-scanner
       - name: SonarQube Scan
-        run: sonar-scanner
-           -Dsonar.host.url=${{ secrets.SONAR_URL }}
-           -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-           -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }}
-           -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }}
-           -Dsonar.sources=src/
-           -Dsonar.junit.reportsPath=target/surefire-reports/
-           -Dsonar.jacoco.reportsPath=target/jacoco.exec
-           -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml
-           -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/
+        env:
+          JAVA_HOME: ${{ steps.java21.outputs.path }}
+        run: |
+          java -version
+          sonar-scanner \
+            -Dsonar.scanner.skipJreProvisioning=true \
+            -Dsonar.host.url=${{ secrets.SONAR_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+            -Dsonar.sources=src/ \
+            -Dsonar.junit.reportsPath=target/surefire-reports/ \
+            -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+            -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml \
+            -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/
       # Check the Quality Gate status.
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
