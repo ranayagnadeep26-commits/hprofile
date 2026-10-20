@@ -1,8 +1,11 @@
 # Prerequisites
 #####
-- JDK 11
+- JDK 21
 - Maven 3
 - MySQL 8 
+
+Ansible provisioning supports Ubuntu 22+ and RHEL-family 9 hosts. Configure
+Jenkins with a JDK installation named `jdk21` for the pipeline.
 
 # Technologies 
 - Spring MVC
