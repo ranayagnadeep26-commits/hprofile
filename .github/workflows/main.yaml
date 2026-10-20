@@ -31,7 +31,6 @@ jobs:
       - name: SonarQube Scan
         env:
           JAVA_HOME: ${{ steps.java21.outputs.path }}
-          PATH: ${{ steps.java21.outputs.path }}/bin:${{ env.PATH }}
         run: |
           java -version
           sonar-scanner \
