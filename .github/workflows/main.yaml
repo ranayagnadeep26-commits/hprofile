@@ -25,7 +25,9 @@ jobs:
 
     # Setup sonar-scanner
       - name: Setup SonarQube
-        uses: warchant/setup-sonar-scanner@v7
+        uses: warchant/setup-sonar-scanner@v10
+        with:
+          version: 8.1.0.6389
    
     # Run sonar-scanner
       - name: SonarQube Scan
